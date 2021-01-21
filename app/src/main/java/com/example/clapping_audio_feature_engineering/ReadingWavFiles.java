@@ -11,6 +11,9 @@ import android.media.AudioTrack;
 import android.util.Log;
 */
 
+import android.media.MediaExtractor;
+import android.media.MediaFormat;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,8 +24,8 @@ public class ReadingWavFiles {
 
     private static final double MAX_16_BIT = Short.MAX_VALUE; // 32,767
 
-    // 고민거리
-    // ** constructor 에서 모든 데이터들에 대해 아래 과정이 다 되도록 만들까?!
+    // ** 고민거리 : constructor 에서 모든 데이터들에 대해 아래 과정이 다 되도록 만들까?!
+
     // --> 모든 데이터들에 대해 아래 procedure 를 모두 실행하는 함수는 또 따로 만들자
 
 
@@ -58,8 +61,28 @@ public class ReadingWavFiles {
         return d;
     }
 
-    // (3) chunk the extracted byte array in 50ms size window
-    
+    // (3) chunk the extracted array in 50ms size window
+    // --> (sample rate * 0.05) 개씩 element 를 뽑아내서 나누면 됨!
+
+
+
+
+    // HELPER FUNCTIONS // --------------------------------------------------------------------
+
+    // get sample rate for calculating window size for 50ms chunk
+    private int getSampleRate(String path) throws IOException {
+        MediaExtractor mex = new MediaExtractor();
+        try {
+            mex.setDataSource(path);// the addresss location of the sound on sdcard.
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        MediaFormat mf = mex.getTrackFormat(0);
+        // int bitRate = mf.getInteger(MediaFormat.KEY_BIT_RATE);
+        int sampleRate = mf.getInteger(MediaFormat.KEY_SAMPLE_RATE);
+        return sampleRate;
+    }
 
 
 }
