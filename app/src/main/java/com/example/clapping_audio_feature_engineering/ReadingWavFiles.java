@@ -1,7 +1,5 @@
 package com.example.clapping_audio_feature_engineering;
 
-
-
 // TODO 1. 안드로이드에서 WAV 파일 READ
 // TODO 2. 각 WAV 파일을 50ms 단위 Window로 쪼개어 Audio Data List 생성
 //  (List 생성 시 타겟 소리가 발생한 window는 따로 Index표시)  // --> 10개의 list가 생기겠지
@@ -25,9 +23,10 @@ public class ReadingWavFiles {
 
     // 고민거리
     // ** constructor 에서 모든 데이터들에 대해 아래 과정이 다 되도록 만들까?!
+    // --> 모든 데이터들에 대해 아래 procedure 를 모두 실행하는 함수는 또 따로 만들자
 
 
-    // (1) convert the audio file-> byte array
+    // (1) read the audio file into byte array
     private byte[] read_file(String filePath) throws IOException
     {
         if (filePath==null) return null;
@@ -48,10 +47,7 @@ public class ReadingWavFiles {
     }
 
 
-    // (2) chunk them in 50ms size window
-
-
-    // (3) convert byte array -> to double array
+    // (2) convert byte array -> to double array
     private static double[] read(byte[]file) {
         byte[] data = new byte[file.length];
         int N = data.length;
@@ -61,5 +57,9 @@ public class ReadingWavFiles {
         }
         return d;
     }
+
+    // (3) chunk the extracted byte array in 50ms size window
+    
+
 
 }
