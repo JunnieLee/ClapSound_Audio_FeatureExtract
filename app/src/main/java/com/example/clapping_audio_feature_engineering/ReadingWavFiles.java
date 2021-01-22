@@ -19,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -33,10 +34,16 @@ public class ReadingWavFiles {
                                     ; 얘도 똑같이 크기 [10][134145]
         - array of array of double arrays --> 오디오 파일 당 여러개의 double array : [3D ARRAY] -
                                     ; 134145/2400 = 55 임. 따라서 얘는 크기 [10][56][2400]
-    */
+
     private static byte[][] arrOfByteArrs = new byte[10][134145];
     private static short[][] arrOfShortArrs = new short[10][134145];
     public static double[][][] arrOfarrOfDoubleArrs = new double[10][56][2400]; // ??????????????????? 이게 맞나 --> 검증작업 들어가야 할듯...
+
+     */
+
+    private static ArrayList<double[]> arrOfDoubleArrs = new ArrayList<double[]>();
+    private static ArrayList<ArrayList<double[]>> arrOfarrOfDoubleArrs = new ArrayList<ArrayList<double[]>>();
+
 
 
     private static final double MAX_16_BIT = Short.MAX_VALUE; // 32,767
@@ -52,7 +59,7 @@ public class ReadingWavFiles {
 
     // 고민거리 2: 오디오파일 1~10까지의 정보를 하나의 array 에 담을 것인가 (fancier code)
     // 아니면 10개의 variable 을 따로 만들것인가(좀 노가다스럽지만 복잡도 감소)
-    // ** 결론: ???
+    // ** 결론: 전자!!
 
 
 
@@ -68,9 +75,8 @@ public class ReadingWavFiles {
     // OVERALL RUN FUNCTION --> 맨 아래에 GetDoubleArray라는 이름으로 만들었음
 
 
-
     // (1) read the audio file into byte array
-    private byte[] read_file(String filePath) throws IOException
+    private static byte[] read_file(String filePath) throws IOException
     {
         if (filePath==null) return null;
         //Reading the file..
@@ -116,13 +122,13 @@ public class ReadingWavFiles {
     // 따라서 output 은 array of double arrays 형태가 됨.
     // --> 각 audio file 의 길이에 따라 해당 array의 길이도 달라질 수 있음. (element 크기는 ELEMENT_NUM_PER_WINDOW로 동일)
 
-    private static double[][] ChunkByWindows(double[] arr){
-        double[][] result = new double[MAX_WINDOW_NUM_PER_FILE][ELEMENT_NUM_PER_WINDOW];
+    private static ArrayList<double[]> ChunkByWindows(double[] arr){
+        ArrayList<double[]> result = new ArrayList<double[]>();
         int loop_cnt = arr.length/ ELEMENT_NUM_PER_WINDOW; // loop를 몇번돌지 (chunk 몇개를 만들지) 결정
         int cursor = 0;
         for (int i=0; i<loop_cnt; i++) {
             // (ex) 4개씩 나누고 싶으면 a[0]~a[3], a[4]~a[7]
-            result[i] = Arrays.copyOfRange(arr, cursor, cursor + ELEMENT_NUM_PER_WINDOW -1 );
+            result.add(Arrays.copyOfRange(arr, cursor, cursor + ELEMENT_NUM_PER_WINDOW -1 ));
             cursor++;
         }
         return result;
@@ -132,10 +138,20 @@ public class ReadingWavFiles {
     // MAIN FUNCTION // --------------------------------------------------------------------
     // --> 본 클래스 외부에서는 이 function을 통해서만 결과값에 접근할 수 있음!!
 
-    /*
-    public static double[][] GetDoubleArray(){
-        // 여기서 모든 작업들이 일어나서 최종적으로 계산된 double array를 반환해주면 됨!!
+
+    // 여기서 모든 작업들이 일어나서 최종적으로 계산된 double array를 반환해주면 됨!!
+    public static ArrayList<ArrayList<double[]>> GetDoubleArray() throws IOException {
+        // (1)~(3) steps
+        for (String file_name : audioFiles){
+            arrOfDoubleArrs.add(Short2Double(Byte2Short(read_file(file_name))));
+            // 각 PCM을 나타내는 double array가 arrOfDoubleArrs에 하나씩 저장
+        }
+        // (4) chunk the extracted array in 50ms size window
+        for (double[] PCM_arr : arrOfDoubleArrs){
+            arrOfarrOfDoubleArrs.add(ChunkByWindows(PCM_arr));
+        }
+        return arrOfarrOfDoubleArrs;
     }
-    */
+
 
 }
