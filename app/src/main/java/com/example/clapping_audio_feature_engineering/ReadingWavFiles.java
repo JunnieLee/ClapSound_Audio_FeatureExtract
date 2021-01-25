@@ -44,8 +44,6 @@ public class ReadingWavFiles {
     private static ArrayList<double[]> arrOfDoubleArrs = new ArrayList<double[]>();
     private static ArrayList<ArrayList<double[]>> arrOfarrOfDoubleArrs = new ArrayList<ArrayList<double[]>>();
 
-
-
     private static final double MAX_16_BIT = Short.MAX_VALUE; // 32,767
     private static final int SAMPLE_RATE = 48000;
     private static final int ELEMENT_NUM_PER_WINDOW = 2400;
@@ -152,6 +150,28 @@ public class ReadingWavFiles {
         }
         return arrOfarrOfDoubleArrs;
     }
+
+    // TESTING FUNCTION // -----------------------------------------------------------------
+
+    
+    /* 전체 process 다 마치고 한꺼번에 print 확인하기
+    public static void main(String[] args) throws IOException{
+
+        for (int i=0; i<10; i++){
+            audioFiles[i] = "src/PCM/"+(i+1)+".pcm";
+        } // audio file 배열에 file path 채워넣기
+
+        int i = 1;
+        ArrayList<ArrayList<double[]>> helperArr = GetDoubleArray();
+        for (ArrayList<double[]> arr_x : helperArr){
+            System.out.println("no."+ (i++) + " PCM file in array of double arrays:");
+            System.out.println("[");
+            for (double[]arr_y:arr_x){
+            System.out.println(Arrays.toString(arr_y));
+            }
+             System.out.println("]");
+        }
+     */
 
 
 }
