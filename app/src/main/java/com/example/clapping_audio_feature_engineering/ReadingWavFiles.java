@@ -93,9 +93,38 @@ public class ReadingWavFiles {
         return byteData;
     }
 
-    // 16bit PCM audio file이기 때문에 byte array -> short array -> double array 로 바꿔줘야함
+    // (2) byte arr --> int arr
+    private static int[] Byte2Int(byte[]src) {
+        int dstLength = src.length >>> 2;
+        int[]dst = new int[dstLength];
 
-    // (2) convert byte array -> to short array
+        for (int i=0; i<dstLength; i++) {
+            int j = i << 2;
+            int x = 0;
+            x += (src[j++] & 0xff) << 0;
+            x += (src[j++] & 0xff) << 8;
+            x += (src[j++] & 0xff) << 16;
+            x += (src[j++] & 0xff) << 24;
+            dst[i] = x;
+        }
+        return dst;
+    }
+
+    // (3) int arr --> short arr
+    private static short[] Int2Short(int[] arr){
+        int len = arr.length;
+        short inShort[] = new short[len];
+        for(int i = 0; i < len; i++)
+        {
+            inShort[i] = (short)arr[i];
+        }
+        return inShort;
+    }
+
+
+    /*
+    // 16bit PCM audio file이기 때문에 short array로 바꿔줘야함
+    // convert byte array -> to short array
     private static short[] Byte2Short(byte[] bytes) {
         short[] out = new short[bytes.length / 2]; // will drop last byte if odd number
         ByteBuffer bb = ByteBuffer.wrap(bytes);
@@ -104,8 +133,9 @@ public class ReadingWavFiles {
         }
         return out;
     }
+    */
 
-    // (3) convert short array -> to double array
+    // (4) convert short array -> to double array
     private static double[] Short2Double(short[] arr) {
         double[] out = new double[arr.length]; // will drop last byte if odd number
         for (int i = 0; i < out.length; i++) {
@@ -141,7 +171,7 @@ public class ReadingWavFiles {
     public static ArrayList<ArrayList<double[]>> GetDoubleArray() throws IOException {
         // (1)~(3) steps
         for (String file_name : audioFiles){
-            arrOfDoubleArrs.add(Short2Double(Byte2Short(read_file(file_name))));
+            arrOfDoubleArrs.add(Short2Double(Int2Short(Byte2Int(read_file(file_name)))));
             // 각 PCM을 나타내는 double array가 arrOfDoubleArrs에 하나씩 저장
         }
         // (4) chunk the extracted array in 50ms size window
@@ -182,7 +212,7 @@ public class ReadingWavFiles {
         System.out.println("-----------------------------------------------------------------------");
         System.out.println("PCM file in a byte array:");
         System.out.print(Arrays.toString(read_file("src/PCM/1.pcm")));
-        // (2) testing function "Byte2Short"
+        // (2) testing function "Byte2Short" ====> no longer valid
         System.out.println("-----------------------------------------------------------------------");
         System.out.println("PCM file in a short array:"); // 지금 왜인진 모르겠지만 이 위치의 한 줄이 잡아먹히고 있음
         System.out.println("PCM file in a short array:");
