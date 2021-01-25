@@ -154,7 +154,7 @@ public class ReadingWavFiles {
     // TESTING FUNCTION // -----------------------------------------------------------------
 
     
-    /* 전체 process 다 마치고 한꺼번에 print 확인하기
+    /* [1] 전체 process 다 마치고 한꺼번에 print 확인하기
     public static void main(String[] args) throws IOException{
 
         for (int i=0; i<10; i++){
@@ -171,6 +171,39 @@ public class ReadingWavFiles {
             }
              System.out.println("]");
         }
+     */
+    
+    
+    
+    /* [2] process 하나하나씩 print 하기
+    public static void main(String[] args) throws IOException{
+
+        // (1) testing function "read_file"
+        System.out.println("-----------------------------------------------------------------------");
+        System.out.println("PCM file in a byte array:");
+        System.out.print(Arrays.toString(read_file("src/PCM/1.pcm")));
+        // (2) testing function "Byte2Short"
+        System.out.println("-----------------------------------------------------------------------");
+        System.out.println("PCM file in a short array:"); // 지금 왜인진 모르겠지만 이 위치의 한 줄이 잡아먹히고 있음
+        System.out.println("PCM file in a short array:");
+        System.out.println(Arrays.toString(Byte2Short(read_file("src/PCM/1.pcm"))));
+
+        // (3) testing function "Short2Double"
+        System.out.println("-----------------------------------------------------------------------");
+        System.out.println("PCM file in a double array:");
+        System.out.println(Arrays.toString(Short2Double(Byte2Short(read_file("src/PCM/1.pcm")))));
+
+        // (4) testing function "ChunkByWindows"
+        System.out.println("-----------------------------------------------------------------------");
+        System.out.println("PCM file in sliced double arrays:");
+        ArrayList<double[]> tmp = ChunkByWindows(Short2Double(Byte2Short(read_file("src/PCM/1.pcm"))));
+        System.out.println("[");
+        for (double[]arr:tmp){
+            System.out.println(Arrays.toString(arr));
+        }
+        System.out.println("]");
+
+    }
      */
 
 
