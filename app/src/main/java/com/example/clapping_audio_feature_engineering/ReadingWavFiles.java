@@ -11,6 +11,8 @@ import android.media.AudioTrack;
 import android.util.Log;
 */
 
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 
@@ -18,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +28,7 @@ import java.util.Arrays;
 
 public class ReadingWavFiles {
 
+    private static AssetManager AM = null;
     private static String audioFile = null; // "./AudioFiles/1.pcm"형태로 생성자를 통해 들어갈것임.
 
     private static ArrayList<double[]> arrOfDoubleArrs = new ArrayList<double[]>();
@@ -45,7 +49,8 @@ public class ReadingWavFiles {
 
 
     // 생성자
-    ReadingWavFiles(String file_name){ // constructor
+    ReadingWavFiles(AssetManager am, String file_name){ // constructor
+        AM = am;
         audioFile = file_name;
     }
 
@@ -60,12 +65,14 @@ public class ReadingWavFiles {
         if (filePath==null) return null;
         //Reading the file..
         byte[] byteData = null;
-        File file = null;
-        file = new File(filePath); // for ex. path= "/sdcard/samplesound.pcm"
-        byteData = new byte[(int) file.length()];
-        FileInputStream in = null;
+
+        AssetFileDescriptor afd = AM.openFd(filePath);
+        int size = (int) afd.getLength();
+        byteData = new byte[size];
+        InputStream in = null;
         try {
-            in = new FileInputStream( file );
+            in = AM.open(filePath);
+            // in = new FileInputStream( file );
             in.read( byteData ); // the byte array is now stored in byteData variable
             in.close();
         } catch (FileNotFoundException e) {
