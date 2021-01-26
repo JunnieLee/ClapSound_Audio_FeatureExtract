@@ -25,21 +25,7 @@ import java.util.Arrays;
 
 public class ReadingWavFiles {
 
-    private static String[] audioFiles = new String[10]; // "./AudioFiles/1.pcm"형태로 생성자를 통해 들어갈것임.
-
-    /* 필요한 property
-        - array of byte arrays --> 오디오 파일 당 한 byte array : [2D ARRAY] - 10 개 array element
-                                    ; 오디오파일 가장 큰게 131KB = 131*1024 = 134144 byte, 따라서 크기는 [10][134145] 로 정하자!
-        - array of short arrays --> 오디오 파일 당 한 short array : [2D ARRAY] - 10 개 array element
-                                    ; 얘도 똑같이 크기 [10][134145]
-        - array of array of double arrays --> 오디오 파일 당 여러개의 double array : [3D ARRAY] -
-                                    ; 134145/2400 = 55 임. 따라서 얘는 크기 [10][56][2400]
-
-    private static byte[][] arrOfByteArrs = new byte[10][134145];
-    private static short[][] arrOfShortArrs = new short[10][134145];
-    public static double[][][] arrOfarrOfDoubleArrs = new double[10][56][2400]; // ??????????????????? 이게 맞나 --> 검증작업 들어가야 할듯...
-
-     */
+    private static String audioFile = null; // "./AudioFiles/1.pcm"형태로 생성자를 통해 들어갈것임.
 
     private static ArrayList<double[]> arrOfDoubleArrs = new ArrayList<double[]>();
     private static ArrayList<ArrayList<double[]>> arrOfarrOfDoubleArrs = new ArrayList<ArrayList<double[]>>();
@@ -47,9 +33,6 @@ public class ReadingWavFiles {
     private static final double MAX_16_BIT = Short.MAX_VALUE; // 32,767
     private static final int SAMPLE_RATE = 48000;
     private static final int ELEMENT_NUM_PER_WINDOW = 2400;
-    // 모두 4초 미만의 오디오 데이터이므로, 한 오디오 파일 당 max window num은 (48000*4) / 2400 = 80
-    private static final int MAX_WINDOW_NUM_PER_FILE = 80;
-
 
 
     // ** 고민거리 1 : constructor 에서 모든 데이터들에 대해 아래 과정이 다 되도록 만들까?!
@@ -62,10 +45,8 @@ public class ReadingWavFiles {
 
 
     // 생성자
-    ReadingWavFiles(){ // constructor
-        for (int i=0; i<10; i++){
-            audioFiles[i] = "./AudioFiles/"+(i+1)+".pcm";
-        } // audio file 배열에 file path 채워넣기
+    ReadingWavFiles(String file_name){ // constructor
+        audioFile = file_name;
     }
 
 
@@ -121,20 +102,6 @@ public class ReadingWavFiles {
         return inShort;
     }
 
-
-    /*
-    // 16bit PCM audio file이기 때문에 short array로 바꿔줘야함
-    // convert byte array -> to short array
-    private static short[] Byte2Short(byte[] bytes) {
-        short[] out = new short[bytes.length / 2]; // will drop last byte if odd number
-        ByteBuffer bb = ByteBuffer.wrap(bytes);
-        for (int i = 0; i < out.length; i++) {
-            out[i] = bb.getShort();
-        }
-        return out;
-    }
-    */
-
     // (4) convert short array -> to double array
     private static double[] Short2Double(short[] arr) {
         double[] out = new double[arr.length]; // will drop last byte if odd number
@@ -166,20 +133,13 @@ public class ReadingWavFiles {
     // MAIN FUNCTION // --------------------------------------------------------------------
     // --> 본 클래스 외부에서는 이 function을 통해서만 결과값에 접근할 수 있음!!
 
-
     // 여기서 모든 작업들이 일어나서 최종적으로 계산된 double array를 반환해주면 됨!!
-    public static ArrayList<ArrayList<double[]>> GetDoubleArray() throws IOException {
-        // (1)~(3) steps
-        for (String file_name : audioFiles){
-            arrOfDoubleArrs.add(Short2Double(Int2Short(Byte2Int(read_file(file_name)))));
-            // 각 PCM을 나타내는 double array가 arrOfDoubleArrs에 하나씩 저장
-        }
-        // (4) chunk the extracted array in 50ms size window
-        for (double[] PCM_arr : arrOfDoubleArrs){
-            arrOfarrOfDoubleArrs.add(ChunkByWindows(PCM_arr));
-        }
-        return arrOfarrOfDoubleArrs;
+    public static ArrayList<double[]> GetFFTInputFormat() throws IOException {
+
+        return ChunkByWindows(Short2Double(Int2Short(Byte2Int(read_file(audioFile)))));
+
     }
+
 
     // TESTING FUNCTION // -----------------------------------------------------------------
 

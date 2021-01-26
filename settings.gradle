@@ -1,2 +1,3 @@
+include ':lib'
 include ':app'
 rootProject.name = "clapping_audio_feature_engineering"
