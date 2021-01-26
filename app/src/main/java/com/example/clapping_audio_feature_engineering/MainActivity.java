@@ -7,6 +7,10 @@ import android.os.Bundle;
 import com.example.clapping_audio_feature_engineering.ReadingWavFiles.*;
 import com.example.clapping_audio_feature_engineering.FFT.*;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class MainActivity extends AppCompatActivity {
 
     private static String[] audioFiles = new String[10];
@@ -21,23 +25,42 @@ public class MainActivity extends AppCompatActivity {
         } // audio file 배열에 file path 채워넣기
 
 
+        // ------------------------------------------------------------------------------------------
+        // 파일 하나씩 처리하도록 일단 짜놓음!!! -------------------------------------------------------
+
         /////////////////////////////////////////////////////////////////////////////////////////////
-        // 일단 당장은 1.pcm에 대해서만 하자~ /////////////////////////////////////////////////////////
+        // 일단 당장은 첫번째 파일 '1.pcm' 에 대해서만 하자~ ///////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
         // [1단계] : 전처리 (ReadingWavFiles)
-
-
+        ReadingWavFiles FirstOne = new ReadingWavFiles(audioFiles[0]);
+        ArrayList<double[]> FirstOneInput = new ArrayList<double[]>();
+        try {
+            FirstOneInput = FirstOne.GetFFTInputFormat();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         // [2단계] : FFT 결과 추출 (FFT)
-
-        /* FFT 에 대하여 결과 출력
-        for(double d: fft) {
-            System.out.println(d);
+        if (FirstOneInput != null){
+            ArrayList<double[]> FFTValArray = new ArrayList<double[]>();
+            int len = FirstOneInput.size();
+            for (int i=0; i<len; i++){
+                FFT fft = new FFT();
+                FFTValArray.add(fft.get_FFT_val(FirstOneInput.get(i)));
+            }
+            // FFT값들을 담은 array에 대하여 값 출력 (one FFT array for one PCM file)
+            System.out.println("FFT array value for '1.pcm' file :");
+            for (double[]arr: FFTValArray){
+                System.out.println(Arrays.toString(arr));
+            }
+            // 출력 형식이 달라져야 한다면 추후에 이쪽 코드 수정~~~
         }
-        */
+
+
         setContentView(R.layout.activity_main);
     }
 }

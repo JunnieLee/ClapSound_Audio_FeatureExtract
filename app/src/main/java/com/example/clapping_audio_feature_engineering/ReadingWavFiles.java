@@ -134,7 +134,7 @@ public class ReadingWavFiles {
     // --> 본 클래스 외부에서는 이 function을 통해서만 결과값에 접근할 수 있음!!
 
     // 여기서 모든 작업들이 일어나서 최종적으로 계산된 double array를 반환해주면 됨!!
-    public static ArrayList<double[]> GetFFTInputFormat() throws IOException {
+    public ArrayList<double[]> GetFFTInputFormat() throws IOException {
 
         return ChunkByWindows(Short2Double(Int2Short(Byte2Int(read_file(audioFile)))));
 
