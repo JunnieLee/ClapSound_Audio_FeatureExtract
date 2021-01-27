@@ -7,9 +7,14 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
 
 import com.example.clapping_audio_feature_engineering.ReadingWavFiles.*;
 import com.example.clapping_audio_feature_engineering.FFT.*;
+import com.example.clapping_audio_feature_engineering.SaveAsFile.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // [1단계] : 전처리 (ReadingWavFiles)
-        ReadingWavFiles FirstOne = new ReadingWavFiles(am, "20.pcm");
+        ReadingWavFiles FirstOne = new ReadingWavFiles(am, audioFiles[0]);
         ArrayList<double[]> FirstOneInput = new ArrayList<double[]>();
         try {
             FirstOneInput = FirstOne.GetFFTInputFormat();
@@ -65,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("-------------------------------------------------------------");
 
 
+
         // [2단계] : FFT 결과 추출 (FFT)
         if (FirstOneInput != null){
             ArrayList<double[]> FFTValArray = new ArrayList<double[]>();
@@ -76,10 +82,33 @@ public class MainActivity extends AppCompatActivity {
             // FFT값들을 담은 array에 대하여 값 출력 (one FFT array for one PCM file)
             // System.out.println("FFT array value for '1.pcm' file :");
             System.out.println("FFT array value for '1.pcm' file :");
+
+            // file_name은 뭐로 하징
+            String file_name = "FFT_for_PCM_no_1";
+            // txt 파일 생성을 위해 결과값을 String 형식으로 만들어주기
+            String input = "[";
             for (double[]arr: FFTValArray){
                 // System.out.println(Arrays.toString(arr));
-                System.out.println(Arrays.toString(arr));
+                String str = Arrays.toString(arr);
+                System.out.println(str);
+                input.concat(str+"\n");
             }
+            input.concat("]");
+
+
+            Button button = (Button) findViewById(R.id.button) ; // 일단 '다운로드'를 위한 버튼 생성
+
+            button.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // TODO : click event
+                    SaveAsFile pcm_1 = new SaveAsFile();
+                    pcm_1.save(file_name, input);
+                    Toast.makeText(context, "DOWNLOAD SUCCEEDED!!!", Toast.LENGTH_LONG).show();
+                }
+            });
+
+
             // 출력 형식이 달라져야 한다면 추후에 이쪽 코드 수정~~~
         }
 
