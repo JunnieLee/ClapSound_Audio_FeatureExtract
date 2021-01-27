@@ -65,10 +65,10 @@ public class MainActivity extends AppCompatActivity {
             }
             // FFT값들을 담은 array에 대하여 값 출력 (one FFT array for one PCM file)
             // System.out.println("FFT array value for '1.pcm' file :");
-            Log.d(null, "FFT array value for '1.pcm' file :");
+            System.out.println("FFT array value for '1.pcm' file :");
             for (double[]arr: FFTValArray){
                 // System.out.println(Arrays.toString(arr));
-                Log.d(null, Arrays.toString(arr));
+                System.out.println(Arrays.toString(arr));
             }
             // 출력 형식이 달라져야 한다면 추후에 이쪽 코드 수정~~~
         }
