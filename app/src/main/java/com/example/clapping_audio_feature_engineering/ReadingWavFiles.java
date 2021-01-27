@@ -15,6 +15,7 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
+import android.os.Environment;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +23,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -35,8 +38,9 @@ public class ReadingWavFiles {
     private static ArrayList<ArrayList<double[]>> arrOfarrOfDoubleArrs = new ArrayList<ArrayList<double[]>>();
 
     private static final double MAX_16_BIT = Short.MAX_VALUE; // 32,767
-    private static final int SAMPLE_RATE = 48000;
-    private static final int ELEMENT_NUM_PER_WINDOW = 2400;
+    private static final int SAMPLE_RATE = 16000;
+    // 16000
+    private static final int ELEMENT_NUM_PER_WINDOW = 800;
 
 
     // ** 고민거리 1 : constructor 에서 모든 데이터들에 대해 아래 과정이 다 되도록 만들까?!
@@ -66,12 +70,31 @@ public class ReadingWavFiles {
         //Reading the file..
         byte[] byteData = null;
 
-        AssetFileDescriptor afd = AM.openFd(filePath);
-        int size = (int) afd.getLength();
-        byteData = new byte[size];
+        // AssetFileDescriptor afd = AM.openFd(filePath);
+        // int size = (int) afd.getLength();
+        // byteData = new byte[size]; // 153600
+        // System.out.println("array size :"+size);
+
         InputStream in = null;
+        // FileInputStream in = null;
+        // for debugging
+        //byteData[0] = 1;
+        //System.out.println("print the byteData [BEFORE] ");
+        //System.out.println(Arrays.toString(byteData));
+        //System.out.println("----------------------------------------------------------------------------------------------");
+
+        /* SD 카드 내에 존재하는 데이터에 대해서는 이렇게 할 수 있음...
+        final String strFolderName = "AudioFiles/"+filePath;
+        final String SD_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + strFolderName;
+        File file = new File(SD_PATH);
+        */
+
         try {
+            // in = afd.createInputStream();
             in = AM.open(filePath);
+            int size = in.available(); // 153600
+            // System.out.println(size);
+            byteData = new byte[size];
             // in = new FileInputStream( file );
             in.read( byteData ); // the byte array is now stored in byteData variable
             in.close();
@@ -82,20 +105,41 @@ public class ReadingWavFiles {
     }
 
     // (2) byte arr --> int arr
-    private static int[] Byte2Int(byte[]src) {
-        int dstLength = src.length >>> 2;
-        int[]dst = new int[dstLength];
+    private static short[] Byte2Short(byte[]src) {
+        ShortBuffer shortbuf = ByteBuffer.wrap(src).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer();
+        short [] dst = new short[shortbuf.remaining()];
+        shortbuf.get(dst);
 
-        for (int i=0; i<dstLength; i++) {
-            int j = i << 2;
-            int x = 0;
-            x += (src[j++] & 0xff) << 0;
-            x += (src[j++] & 0xff) << 8;
-            x += (src[j++] & 0xff) << 16;
-            x += (src[j++] & 0xff) << 24;
-            dst[i] = x;
+        int len = dst.length;
+        int i=0;
+        while (dst[i]==0){
+            i++;
+        } // 이 loop을 빠져나올때의 i값이 첫번째로 0 이 아닌 값의 idx
+
+        /*
+        for (short k : dst){
+            if (k != 0)
+                System.out.println("test" + k);
         }
-        return dst;
+         */
+        short[] slice = Arrays.copyOfRange( dst, i, len-1); // 엥... 왜 안되는겨 ㅠㅠㅠ
+
+        return slice;
+        // return dst;
+
+//        int dstLength = src.length >>> 2;
+//        int[]dst = new int[dstLength];
+//
+//        for (int i=0; i<dstLength; i++) {
+//            int j = i << 2;
+//            int x = 0;
+//            x += (src[j++] & 0xff) << 0;
+//            x += (src[j++] & 0xff) << 8;
+//            x += (src[j++] & 0xff) << 16;
+//            x += (src[j++] & 0xff) << 24;
+//            dst[i] = x;
+//        }
+//        return dst;
     }
 
     // (3) int arr --> short arr
@@ -143,7 +187,7 @@ public class ReadingWavFiles {
     // 여기서 모든 작업들이 일어나서 최종적으로 계산된 double array를 반환해주면 됨!!
     public ArrayList<double[]> GetFFTInputFormat() throws IOException {
 
-        return ChunkByWindows(Short2Double(Int2Short(Byte2Int(read_file(audioFile)))));
+        return ChunkByWindows(Short2Double(Byte2Short(read_file(audioFile))));
 
     }
 

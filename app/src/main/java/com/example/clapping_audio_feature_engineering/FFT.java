@@ -10,7 +10,20 @@ public class FFT {
         double[] fft = new double[input.length * 2];
         System.arraycopy(input, 0, fft, 0, input.length);
         fftDo.realForwardFull(fft);
-        return fft;
+        /*
+        for (double elements:fft){
+            elements = Math.abs(elements);
+        }
+        */
+        double[] abs_fft = new double[fft.length];
+        int i=0;
+        for (double k:fft){
+            abs_fft[i] = Math.abs(k);
+            i++;
+        }
+
+        return abs_fft;
+        // return fft;
     }
 
 }

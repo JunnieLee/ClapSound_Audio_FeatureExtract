@@ -2,6 +2,7 @@ package com.example.clapping_audio_feature_engineering;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -25,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
         // AssetFileDescriptor afd = getResources().getAssets().openFd("audio/oh.mp3");
 
-        AssetManager am = getResources().getAssets() ;
+        Context context = getApplicationContext();
+        AssetManager am = context.getAssets() ; // getResources().getAssets()
 
         // [0단계] : 각 PCM 파일별 경로 넘겨주기
         for (int i=0; i<8; i++){ // 일단 당장은 8개라 8 이라고 해놨음!! --> 추후 10개까지 채우면 그때 수정~
@@ -46,13 +48,21 @@ public class MainActivity extends AppCompatActivity {
 
 
         // [1단계] : 전처리 (ReadingWavFiles)
-        ReadingWavFiles FirstOne = new ReadingWavFiles(am, audioFiles[0]);
+        ReadingWavFiles FirstOne = new ReadingWavFiles(am, "20.pcm");
         ArrayList<double[]> FirstOneInput = new ArrayList<double[]>();
         try {
             FirstOneInput = FirstOne.GetFFTInputFormat();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+        // printing for check
+        System.out.println("FFT Input as double arrays : ");
+        for (double[] arr : FirstOneInput){
+            System.out.println(Arrays.toString(arr));
+        }
+        System.out.println("-------------------------------------------------------------");
 
 
         // [2단계] : FFT 결과 추출 (FFT)

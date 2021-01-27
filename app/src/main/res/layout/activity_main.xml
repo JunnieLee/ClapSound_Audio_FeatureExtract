@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="FFT value array of PCM file # 1"
         tools:layout_editor_absoluteX="35dp"
         tools:layout_editor_absoluteY="82dp" />
 
