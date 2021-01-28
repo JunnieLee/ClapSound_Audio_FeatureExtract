@@ -102,16 +102,20 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("FFT array value for '1.pcm' file :");
 
             // file_name은 뭐로 하징
-            String file_name = "FFT_for_PCM_no_1";
+            String file_name = "FFT_1";
             // txt 파일 생성을 위해 결과값을 String 형식으로 만들어주기
-            String input = "[";
+            StringBuilder builder = new StringBuilder("[");
             for (double[]arr: FFTValArray){
                 // System.out.println(Arrays.toString(arr));
                 String str = Arrays.toString(arr);
                 System.out.println(str);
-                input.concat(str+"\n");
+                builder.append(str+"\n");
             }
-            input.concat("]");
+            builder.append("]");
+
+            String input = builder.toString();
+            System.out.println("input :");
+            System.out.println(input);
 
 
             setContentView(R.layout.activity_main);

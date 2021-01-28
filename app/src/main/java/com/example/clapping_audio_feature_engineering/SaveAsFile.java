@@ -25,7 +25,9 @@ public class SaveAsFile {
             File file = new File(root+"/"+file_name +".txt");
 
             FileWriter writer = new FileWriter(file, true);
-            writer.append(content);
+
+            System.out.println(content);
+            writer.write(content);
             writer.flush();
             writer.close();
 
