@@ -96,7 +96,10 @@ public class MainActivity extends AppCompatActivity {
             input.concat("]");
 
 
-            Button button = (Button) findViewById(R.id.button) ; // 일단 '다운로드'를 위한 버튼 생성
+            setContentView(R.layout.activity_main);
+
+
+            Button button = (Button) findViewById(R.id.button) ; // '다운로드'를 위한 버튼 생성
 
             button.setOnClickListener(new Button.OnClickListener() {
                 @Override
@@ -104,15 +107,11 @@ public class MainActivity extends AppCompatActivity {
                     // TODO : click event
                     SaveAsFile pcm_1 = new SaveAsFile();
                     pcm_1.save(file_name, input);
-                    Toast.makeText(context, "DOWNLOAD SUCCEEDED!!!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "DOWNLOAD SUCCESS!!!", Toast.LENGTH_LONG).show();
                 }
             });
-
-
             // 출력 형식이 달라져야 한다면 추후에 이쪽 코드 수정~~~
         }
 
-
-        setContentView(R.layout.activity_main);
     }
 }
