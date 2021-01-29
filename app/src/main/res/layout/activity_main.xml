@@ -11,27 +11,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="Check the FFT value"
-        android:textColor="#f00"
+        android:layout_marginStart="84dp"
+        android:layout_marginLeft="84dp"
+        android:layout_marginBottom="92dp"
+        android:text="Check the FFT value !"
+        android:textColor="#000000"
         android:textSize="25sp"
-        android:padding="100dp"
         android:textStyle="bold|italic"
-        tools:layout_editor_absoluteX="120dp"
-        tools:layout_editor_absoluteY="256dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintBottom_toBottomOf="@+id/button"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="#f00"
+        android:layout_marginVertical="500dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="500dp"
+        android:layout_marginBottom="180dp"
+        android:background="#FFFF00"
         android:padding="10dp"
         android:text="Download FFT.txt"
         android:textColor="#fff"
         android:textStyle="bold"
-        tools:layout_editor_absoluteX="120dp"
-        tools:layout_editor_absoluteY="411dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/simpleTextView"
+        app:layout_constraintTop_toBottomOf="@+id/lineChart1" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChart1"
+        android:layout_width="match_parent"
+        android:layout_height="376dp"
+        android:layout_marginBottom="124dp"
+        android:outlineAmbientShadowColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
