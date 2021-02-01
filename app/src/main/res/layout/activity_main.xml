@@ -49,6 +49,24 @@
                 android:layout_marginStart="120dp"
                 android:layout_marginLeft="120dp" />
 
+            <TextView
+                android:id="@+id/simpleTextView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="84dp"
+                android:layout_marginLeft="84dp"
+                android:layout_marginTop="50dp"
+                android:text="Spectral Centroid value !"
+                android:textColor="#000000"
+                android:textSize="25sp"
+                android:textStyle="bold|italic" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChart2"
+                android:layout_width="match_parent"
+                android:layout_height="376dp"
+                android:layout_marginTop="50dp" />
+
 
         </LinearLayout>
 
