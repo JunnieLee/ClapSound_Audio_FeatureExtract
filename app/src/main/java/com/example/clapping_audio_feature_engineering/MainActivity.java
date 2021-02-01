@@ -152,35 +152,46 @@ public class MainActivity extends AppCompatActivity {
             // plotting 부분 코드
             lineChart = (LineChart)findViewById(R.id.lineChart1);
 
+            /*
             ArrayList<Entry> values = new ArrayList<>();
-
-            for (int i = 0; i < 10; i++) {
-
+            for (int i = 0; i < 20; i++) {
                 float val = (float) (Math.random() * 10);
                 values.add(new Entry(i, val));
             }
-
             LineDataSet set1;
-            set1 = new LineDataSet(values, "DataSet 1");
-
+            set1 = new LineDataSet(values, null);
             ArrayList<ILineDataSet> dataSets = new ArrayList<>();
             dataSets.add(set1); // add the data sets
+
+            ArrayList<Entry> values2 = new ArrayList<>();
+            for (int i = 0; i < 20; i++) {
+                float val = (float) (Math.random() * 10);
+                values2.add(new Entry(i, val));
+            }
+            LineDataSet set2;
+            set2 = new LineDataSet(values2, null);
+            dataSets.add(set2); // add the data sets
+
 
             // create a data object with the data sets
             LineData data = new LineData(dataSets);
 
             // black lines and points
-            set1.setColor(Color.BLACK);
-            set1.setCircleColor(Color.BLACK);
+            set1.setColor(Color.RED);
+            set1.setDrawCircles(false);
+            set1.setDrawValues(false);
+
+            set2.setColor(Color.RED);
+            set2.setDrawCircles(false);
+            set2.setDrawValues(false);
 
             // set data
             lineChart.setData(data);
 
-            /*
-            PlotFft FFT_plot = new PlotFft(lineChart);
-            FFT_plot.getLineData(100, 100);
-            FFT_plot.showChart();
             */
+
+            PlotFft FFT_plot = new PlotFft(lineChart, FFTValArray);
+
         }
 
     }
