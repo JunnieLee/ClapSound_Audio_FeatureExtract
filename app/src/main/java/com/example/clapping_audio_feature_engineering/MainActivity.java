@@ -10,16 +10,24 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-
 import com.example.clapping_audio_feature_engineering.ReadingWavFiles.*;
 import com.example.clapping_audio_feature_engineering.FFT.*;
 import com.example.clapping_audio_feature_engineering.SaveAsFile.*;
+import com.example.clapping_audio_feature_engineering.PlotFft.*;
+
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,8 +35,14 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static String[] audioFiles = new String[10];
+    // for the chart
+    public LineChart lineChart;
+    public ArrayList<String> x = new ArrayList<String>();
+    public ArrayList<Entry> y = new ArrayList<Entry>();
+    public ArrayList<LineDataSet> lineDataSets = new ArrayList<LineDataSet>();
+    public LineData lineData = null;
 
+    private static String[] audioFiles = new String[10];
 
 
     @Override
@@ -133,6 +147,40 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             // 출력 형식이 달라져야 한다면 추후에 이쪽 코드 수정~~~
+
+
+            // plotting 부분 코드
+            lineChart = (LineChart)findViewById(R.id.lineChart1);
+
+            ArrayList<Entry> values = new ArrayList<>();
+
+            for (int i = 0; i < 10; i++) {
+
+                float val = (float) (Math.random() * 10);
+                values.add(new Entry(i, val));
+            }
+
+            LineDataSet set1;
+            set1 = new LineDataSet(values, "DataSet 1");
+
+            ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+            dataSets.add(set1); // add the data sets
+
+            // create a data object with the data sets
+            LineData data = new LineData(dataSets);
+
+            // black lines and points
+            set1.setColor(Color.BLACK);
+            set1.setCircleColor(Color.BLACK);
+
+            // set data
+            lineChart.setData(data);
+
+            /*
+            PlotFft FFT_plot = new PlotFft(lineChart);
+            FFT_plot.getLineData(100, 100);
+            FFT_plot.showChart();
+            */
         }
 
     }

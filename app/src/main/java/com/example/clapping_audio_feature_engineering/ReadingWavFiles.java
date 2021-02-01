@@ -106,25 +106,23 @@ public class ReadingWavFiles {
 
     // (2) byte arr --> int arr
     private static short[] Byte2Short(byte[]src) {
+        // ShortBuffer shortbuf = ByteBuffer.wrap(src).order(ByteOrder.BIG_ENDIAN).asShortBuffer();
         ShortBuffer shortbuf = ByteBuffer.wrap(src).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer();
         short [] dst = new short[shortbuf.remaining()];
         shortbuf.get(dst);
 
+
+        // 앞부분 0들 잘라내는 작업 -- 일단 당장은 skip
         int len = dst.length;
         int i=0;
         while (dst[i]==0){
             i++;
         } // 이 loop을 빠져나올때의 i값이 첫번째로 0 이 아닌 값의 idx
-
-        /*
-        for (short k : dst){
-            if (k != 0)
-                System.out.println("test" + k);
-        }
-         */
-        short[] slice = Arrays.copyOfRange( dst, i, len-1); // 엥... 왜 안되는겨 ㅠㅠㅠ
+        short[] slice = Arrays.copyOfRange( dst, i, len-1);
 
         return slice;
+
+
         // return dst;
 
 //        int dstLength = src.length >>> 2;
@@ -175,7 +173,7 @@ public class ReadingWavFiles {
         for (int i=0; i<loop_cnt; i++) {
             // (ex) 4개씩 나누고 싶으면 a[0]~a[3], a[4]~a[7]
             result.add(Arrays.copyOfRange(arr, cursor, cursor + ELEMENT_NUM_PER_WINDOW -1 ));
-            cursor++;
+            cursor+=ELEMENT_NUM_PER_WINDOW;
         }
         return result;
     }
