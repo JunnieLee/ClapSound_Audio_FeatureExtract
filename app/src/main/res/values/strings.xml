@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">clapping_audio_feature_engineering</string>
+    <string name="download_fft_txt">Download FFT.txt</string>
+    <string name="check_the_fft_value">Check the FFT value !</string>
 </resources>
