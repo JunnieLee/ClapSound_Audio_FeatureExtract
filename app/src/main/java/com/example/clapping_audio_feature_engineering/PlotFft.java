@@ -2,12 +2,8 @@ package com.example.clapping_audio_feature_engineering;
 
 import android.graphics.Color;
 
-import androidx.core.content.ContextCompat;
-
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -32,16 +28,8 @@ public class PlotFft {
                 entry_chart.add(new Entry(i*20, (float) arr[i]));
             }
 
-
-            /*
-            LineData chartData = new LineData();
-            LineDataSet set = new LineDataSet(entry_chart, "꺾은선1");
-            chartData.addDataSet(set);
-            lineChart.setData(chartData);
-            */
             LineDataSet set;
             set = new LineDataSet(entry_chart, null);
-            // ArrayList<ILineDataSet> dataSets = new ArrayList<>();
             dataSets.add(set); // add the data sets
 
             set.setColor(Color.RED);

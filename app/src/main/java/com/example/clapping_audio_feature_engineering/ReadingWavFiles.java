@@ -4,12 +4,6 @@ package com.example.clapping_audio_feature_engineering;
 // TODO 2. 각 WAV 파일을 50ms 단위 Window로 쪼개어 Audio Data List 생성
 //  (List 생성 시 타겟 소리가 발생한 window는 따로 Index표시)  // --> 10개의 list가 생기겠지
 
-/*
-import android.media.AudioFormat;
-import android.media.AudioManager;
-import android.media.AudioTrack;
-import android.util.Log;
-*/
 
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
@@ -43,24 +37,12 @@ public class ReadingWavFiles {
     private static final int ELEMENT_NUM_PER_WINDOW = 800;
 
 
-    // ** 고민거리 1 : constructor 에서 모든 데이터들에 대해 아래 과정이 다 되도록 만들까?!
-    // ** 결론: X. 생성자에서는 그냥 과정에 필요한 데이터들만 넣어주고, over-all 함수는 그냥 MAIN으로 하나 따로 만들자!
-
-    // 고민거리 2: 오디오파일 1~10까지의 정보를 하나의 array 에 담을 것인가 (fancier code)
-    // 아니면 10개의 variable 을 따로 만들것인가(좀 노가다스럽지만 복잡도 감소)
-    // ** 결론: 전자!!
-
-
-
     // 생성자
     ReadingWavFiles(AssetManager am, String file_name){ // constructor
         AM = am;
         audioFile = file_name;
     }
 
-
-    // --> 모든 데이터들에 대해 아래 procedure 를 모두 실행하는 함수는 또 따로 만들자
-    // OVERALL RUN FUNCTION --> 맨 아래에 GetDoubleArray라는 이름으로 만들었음
 
 
     // (1) read the audio file into byte array
@@ -70,24 +52,7 @@ public class ReadingWavFiles {
         //Reading the file..
         byte[] byteData = null;
 
-        // AssetFileDescriptor afd = AM.openFd(filePath);
-        // int size = (int) afd.getLength();
-        // byteData = new byte[size]; // 153600
-        // System.out.println("array size :"+size);
-
         InputStream in = null;
-        // FileInputStream in = null;
-        // for debugging
-        //byteData[0] = 1;
-        //System.out.println("print the byteData [BEFORE] ");
-        //System.out.println(Arrays.toString(byteData));
-        //System.out.println("----------------------------------------------------------------------------------------------");
-
-        /* SD 카드 내에 존재하는 데이터에 대해서는 이렇게 할 수 있음...
-        final String strFolderName = "AudioFiles/"+filePath;
-        final String SD_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + strFolderName;
-        File file = new File(SD_PATH);
-        */
 
         try {
             // in = afd.createInputStream();
@@ -110,34 +75,7 @@ public class ReadingWavFiles {
         ShortBuffer shortbuf = ByteBuffer.wrap(src).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer();
         short [] dst = new short[shortbuf.remaining()];
         shortbuf.get(dst);
-
-
-        // 앞부분 0들 잘라내는 작업 -- 일단 당장은 skip
-        int len = dst.length;
-        int i=0;
-        while (dst[i]==0){
-            i++;
-        } // 이 loop을 빠져나올때의 i값이 첫번째로 0 이 아닌 값의 idx
-        short[] slice = Arrays.copyOfRange( dst, i, len-1);
-
-        return slice;
-
-
-        // return dst;
-
-//        int dstLength = src.length >>> 2;
-//        int[]dst = new int[dstLength];
-//
-//        for (int i=0; i<dstLength; i++) {
-//            int j = i << 2;
-//            int x = 0;
-//            x += (src[j++] & 0xff) << 0;
-//            x += (src[j++] & 0xff) << 8;
-//            x += (src[j++] & 0xff) << 16;
-//            x += (src[j++] & 0xff) << 24;
-//            dst[i] = x;
-//        }
-//        return dst;
+        return dst;
     }
 
     // (3) int arr --> short arr
@@ -172,7 +110,7 @@ public class ReadingWavFiles {
         int cursor = 0;
         for (int i=0; i<loop_cnt; i++) {
             // (ex) 4개씩 나누고 싶으면 a[0]~a[3], a[4]~a[7]
-            result.add(Arrays.copyOfRange(arr, cursor, cursor + ELEMENT_NUM_PER_WINDOW -1 ));
+            result.add(Arrays.copyOfRange(arr, cursor, cursor + ELEMENT_NUM_PER_WINDOW  ));
             cursor+=ELEMENT_NUM_PER_WINDOW;
         }
         return result;
@@ -184,66 +122,8 @@ public class ReadingWavFiles {
 
     // 여기서 모든 작업들이 일어나서 최종적으로 계산된 double array를 반환해주면 됨!!
     public ArrayList<double[]> GetFFTInputFormat() throws IOException {
-
         return ChunkByWindows(Short2Double(Byte2Short(read_file(audioFile))));
-
     }
-
-
-    // TESTING FUNCTION // -----------------------------------------------------------------
-
-    
-    /* [1] 전체 process 다 마치고 한꺼번에 print 확인하기
-    public static void main(String[] args) throws IOException{
-
-        for (int i=0; i<10; i++){
-            audioFiles[i] = "src/PCM/"+(i+1)+".pcm";
-        } // audio file 배열에 file path 채워넣기
-
-        int i = 1;
-        ArrayList<ArrayList<double[]>> helperArr = GetDoubleArray();
-        for (ArrayList<double[]> arr_x : helperArr){
-            System.out.println("no."+ (i++) + " PCM file in array of double arrays:");
-            System.out.println("[");
-            for (double[]arr_y:arr_x){
-            System.out.println(Arrays.toString(arr_y));
-            }
-             System.out.println("]");
-        }
-     */
-    
-    
-    
-    /* [2] process 하나하나씩 print 하기
-    public static void main(String[] args) throws IOException{
-
-        // (1) testing function "read_file"
-        System.out.println("-----------------------------------------------------------------------");
-        System.out.println("PCM file in a byte array:");
-        System.out.print(Arrays.toString(read_file("src/PCM/1.pcm")));
-        // (2) testing function "Byte2Short" ====> no longer valid
-        System.out.println("-----------------------------------------------------------------------");
-        System.out.println("PCM file in a short array:"); // 지금 왜인진 모르겠지만 이 위치의 한 줄이 잡아먹히고 있음
-        System.out.println("PCM file in a short array:");
-        System.out.println(Arrays.toString(Byte2Short(read_file("src/PCM/1.pcm"))));
-
-        // (3) testing function "Short2Double"
-        System.out.println("-----------------------------------------------------------------------");
-        System.out.println("PCM file in a double array:");
-        System.out.println(Arrays.toString(Short2Double(Byte2Short(read_file("src/PCM/1.pcm")))));
-
-        // (4) testing function "ChunkByWindows"
-        System.out.println("-----------------------------------------------------------------------");
-        System.out.println("PCM file in sliced double arrays:");
-        ArrayList<double[]> tmp = ChunkByWindows(Short2Double(Byte2Short(read_file("src/PCM/1.pcm"))));
-        System.out.println("[");
-        for (double[]arr:tmp){
-            System.out.println(Arrays.toString(arr));
-        }
-        System.out.println("]");
-
-    }
-     */
 
 
 }

@@ -27,7 +27,6 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
         // [0단계] : 각 PCM 파일별 경로 넘겨주기
         for (int i=0; i<8; i++){ // 일단 당장은 8개라 8 이라고 해놨음!! --> 추후 10개까지 채우면 그때 수정~
 
-            // src\main\java\com\example\clapping_audio_feature_engineering\MainActivity.java
-            // src\main\java\com\example\clapping_audio_feature_engineering\AudioFiles\1.pcm
             audioFiles[i] = (i+1)+".pcm"; // com\example\clapping_audio_feature_engineering\AudioFiles\1.pcm
         } // audio file 배열에 file path 채워넣기
 
@@ -126,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
                 builder.append(str+"\n");
             }
             builder.append("]");
-
             String input = builder.toString();
             System.out.println("input :");
             System.out.println(input);
@@ -134,9 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
             setContentView(R.layout.activity_main);
 
-
             Button button = (Button) findViewById(R.id.button) ; // '다운로드'를 위한 버튼 생성
-
             button.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -151,45 +145,6 @@ public class MainActivity extends AppCompatActivity {
 
             // plotting 부분 코드
             lineChart = (LineChart)findViewById(R.id.lineChart1);
-
-            /*
-            ArrayList<Entry> values = new ArrayList<>();
-            for (int i = 0; i < 20; i++) {
-                float val = (float) (Math.random() * 10);
-                values.add(new Entry(i, val));
-            }
-            LineDataSet set1;
-            set1 = new LineDataSet(values, null);
-            ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-            dataSets.add(set1); // add the data sets
-
-            ArrayList<Entry> values2 = new ArrayList<>();
-            for (int i = 0; i < 20; i++) {
-                float val = (float) (Math.random() * 10);
-                values2.add(new Entry(i, val));
-            }
-            LineDataSet set2;
-            set2 = new LineDataSet(values2, null);
-            dataSets.add(set2); // add the data sets
-
-
-            // create a data object with the data sets
-            LineData data = new LineData(dataSets);
-
-            // black lines and points
-            set1.setColor(Color.RED);
-            set1.setDrawCircles(false);
-            set1.setDrawValues(false);
-
-            set2.setColor(Color.RED);
-            set2.setDrawCircles(false);
-            set2.setDrawValues(false);
-
-            // set data
-            lineChart.setData(data);
-
-            */
-
             PlotFft FFT_plot = new PlotFft(lineChart, FFTValArray);
 
         }
