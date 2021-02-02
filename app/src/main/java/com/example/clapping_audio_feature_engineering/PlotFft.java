@@ -14,10 +14,11 @@ import java.util.ArrayList;
 
 public class PlotFft {
 
-    public PlotFft(LineChart lineChart, ArrayList<double[]> FFTValArray) {
+    public PlotFft(LineChart lineChart, ArrayList<double[]> FFTValArray, int event_window_idx) {
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
 
+        int k=0;
         for (double[] arr : FFTValArray){
 
             ArrayList<Entry> entry_chart = new ArrayList<>();
@@ -32,9 +33,15 @@ public class PlotFft {
             set = new LineDataSet(entry_chart, null);
             dataSets.add(set); // add the data sets
 
-            set.setColor(Color.RED);
+            if (k==event_window_idx){
+                set.setColor(Color.RED);
+            } else {
+                set.setColor(Color.BLUE);
+            }
             set.setDrawCircles(false);
             set.setDrawValues(false);
+
+            k++;
         }
 
         // create a data object with the data sets

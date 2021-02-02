@@ -10,17 +10,24 @@ import android.content.res.AssetManager;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 
 public class ReadingWavFiles {
@@ -104,16 +111,35 @@ public class ReadingWavFiles {
     // 따라서 output 은 array of double arrays 형태가 됨.
     // --> 각 audio file 의 길이에 따라 해당 array의 길이도 달라질 수 있음. (element 크기는 ELEMENT_NUM_PER_WINDOW로 동일)
 
-    private static ArrayList<double[]> ChunkByWindows(double[] arr){
+    private static Map.Entry<Integer,ArrayList<double[]>> ChunkByWindows(double[] arr){
         ArrayList<double[]> result = new ArrayList<double[]>();
         int loop_cnt = arr.length/ ELEMENT_NUM_PER_WINDOW; // loop를 몇번돌지 (chunk 몇개를 만들지) 결정
+
+        double max_val = arr[0]; // 여기에 max값을
+        int max_idx = 0;// 여기에 max값이 있는 윈도우의 idx값을
+
         int cursor = 0;
         for (int i=0; i<loop_cnt; i++) {
             // (ex) 4개씩 나누고 싶으면 a[0]~a[3], a[4]~a[7]
             result.add(Arrays.copyOfRange(arr, cursor, cursor + ELEMENT_NUM_PER_WINDOW  ));
             cursor+=ELEMENT_NUM_PER_WINDOW;
+
+            // event 발생 window를 체크해주기 위한 코드
+            double[] d = Arrays.copyOf(result.get(i), result.get(i).length);
+            Arrays.sort(d);
+            double local_max = d[d. length-1];
+            if (max_val <= local_max){
+                max_val = local_max;
+                max_idx = i;
+            }
+
         }
-        return result;
+        /*
+        List b = Arrays.asList(arr);
+        Collections.max(b);
+         */
+        return new AbstractMap.SimpleEntry<Integer,ArrayList<double[]>>(max_idx, result);
+        // return result;
     }
 
 
@@ -121,7 +147,7 @@ public class ReadingWavFiles {
     // --> 본 클래스 외부에서는 이 function을 통해서만 결과값에 접근할 수 있음!!
 
     // 여기서 모든 작업들이 일어나서 최종적으로 계산된 double array를 반환해주면 됨!!
-    public ArrayList<double[]> GetFFTInputFormat() throws IOException {
+    public Map.Entry<Integer,ArrayList<double[]>> GetFFTInputFormat() throws IOException {
         return ChunkByWindows(Short2Double(Byte2Short(read_file(audioFile))));
     }
 

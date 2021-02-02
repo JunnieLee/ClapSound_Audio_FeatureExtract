@@ -75,9 +75,11 @@ public class MainActivity extends AppCompatActivity {
 
         // [1단계] : 전처리 (ReadingWavFiles)
         ReadingWavFiles FirstOne = new ReadingWavFiles(am, audioFiles[0]);
+        int event_window_idx = -1; // 소리나는 윈도우에 대한 변수 설정
         ArrayList<double[]> FirstOneInput = new ArrayList<double[]>();
         try {
-            FirstOneInput = FirstOne.GetFFTInputFormat();
+            event_window_idx = FirstOne.GetFFTInputFormat().getKey();
+            FirstOneInput = FirstOne.GetFFTInputFormat().getValue();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
             // ** FFT plotting 부분 코드
             lineChart = (LineChart)findViewById(R.id.lineChart1);
-            PlotFft FFT_plot = new PlotFft(lineChart, FFTValArray);
+            PlotFft FFT_plot = new PlotFft(lineChart, FFTValArray, event_window_idx);
 
             // ** Spectral Centroid 계산
             ArrayList<Double> arr_of_SC = new ArrayList<Double>();
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
             // ** Spectral Centroid plotting
             lineChart2 = (LineChart)findViewById(R.id.lineChart2);
-            PlotSpectralCentroid SCPlot = new PlotSpectralCentroid(lineChart2, arr_of_SC);
+            PlotSpectralCentroid SCPlot = new PlotSpectralCentroid(lineChart2, arr_of_SC, event_window_idx, context);
         }
 
     }
