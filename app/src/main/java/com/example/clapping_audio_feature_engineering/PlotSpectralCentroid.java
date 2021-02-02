@@ -1,6 +1,7 @@
 package com.example.clapping_audio_feature_engineering;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
@@ -20,9 +21,11 @@ public class PlotSpectralCentroid {
 
         ArrayList<Entry> entry_chart = new ArrayList<>();
         for (int i=0; i< SCArray.size(); i++){
-            // entry_chart.add(new Entry(x값, y값)); i*20
+            // entry_chart.add(new Entry(x값, y값));
             entry_chart.add(new Entry((float) (i*0.05), (float) (double) SCArray.get(i)));
         }
+
+
 
         LineDataSet set;
         set = new LineDataSet(entry_chart, null);

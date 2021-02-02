@@ -10,7 +10,8 @@ public class SpectralCentroid {
         for(int i=0;i<N;i++) {
             freq[i] = i * 20;
         }
-        return normalize((sum(multiply(fft_arr,freq))/sum(fft_arr)));
+
+        return  normalize((sum(multiply(fft_arr,freq))/sum(fft_arr)));
     }
 
     private static double sum(double[] arr){

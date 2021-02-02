@@ -34,14 +34,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static java.lang.Double.NaN;
+
+
+
 public class MainActivity extends AppCompatActivity {
 
     // for the chart
     public LineChart lineChart;
-    public ArrayList<String> x = new ArrayList<String>();
-    public ArrayList<Entry> y = new ArrayList<Entry>();
-    public ArrayList<LineDataSet> lineDataSets = new ArrayList<LineDataSet>();
-    public LineData lineData = null;
+    public LineChart lineChart2;
 
     private static String[] audioFiles = new String[10];
 
@@ -116,22 +117,25 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
-            // FFT plotting 부분 코드
+            // ** FFT plotting 부분 코드
             lineChart = (LineChart)findViewById(R.id.lineChart1);
             PlotFft FFT_plot = new PlotFft(lineChart, FFTValArray);
 
-            // Spectral Centroid 계산
+            // ** Spectral Centroid 계산
             ArrayList<Double> arr_of_SC = new ArrayList<Double>();
             for (double[]arr: FFTValArray){
                 SpectralCentroid sc = new SpectralCentroid();
-                arr_of_SC.add(sc.calculate(arr));
-                // for check
+                Double val = sc.calculate(arr);
+                if (val.isNaN()){ // zero devision의 경우 따로 처리!
+                    val = 0.0;
+                }
+                arr_of_SC.add(val);
                 // Log.i("centroidtest", Double.toString(sc.calculate(arr))); --> 디버깅용 꿀팁!!
-                //  System.out.println(sc.calculate(arr)); // double value
             }
 
-            // Spectral Centroid plotting
-
+            // ** Spectral Centroid plotting
+            lineChart2 = (LineChart)findViewById(R.id.lineChart2);
+            PlotSpectralCentroid SCPlot = new PlotSpectralCentroid(lineChart2, arr_of_SC);
         }
 
     }
