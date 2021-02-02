@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     // for the chart
     public LineChart lineChart;
     public LineChart lineChart2;
+    public LineChart lineChart3;
 
     private static String[] audioFiles = new String[10];
 
@@ -151,6 +152,13 @@ public class MainActivity extends AppCompatActivity {
             // ** Spectral Centroid plotting
             lineChart2 = (LineChart)findViewById(R.id.lineChart2);
             PlotSpectralCentroid SCPlot = new PlotSpectralCentroid(lineChart2, arr_of_SC, event_window_idx, context);
+
+            // ** ZCR 은 위에 ZCR_arr에서 이미 계산해놨구
+
+            // ** ZCR plotting
+            lineChart3 = (LineChart)findViewById(R.id.lineChart3);
+            PlotZCR ZCRPlot = new PlotZCR(lineChart3, ZCR_arr, event_window_idx, context);
+
         }
 
     }
