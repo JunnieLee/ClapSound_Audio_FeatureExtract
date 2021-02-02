@@ -22,6 +22,7 @@ import com.example.clapping_audio_feature_engineering.FFT.*;
 import com.example.clapping_audio_feature_engineering.SaveAsFile.*;
 import com.example.clapping_audio_feature_engineering.PlotFft.*;
 import com.example.clapping_audio_feature_engineering.SpectralCentroid.*;
+import com.example.clapping_audio_feature_engineering.PlotSpectralCentroid.*;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -125,9 +126,11 @@ public class MainActivity extends AppCompatActivity {
                 SpectralCentroid sc = new SpectralCentroid();
                 arr_of_SC.add(sc.calculate(arr));
                 // for check
-                Log.i("centroidtest", Double.toString(sc.calculate(arr)));
-//                System.out.println(sc.calculate(arr)); // double value
+                // Log.i("centroidtest", Double.toString(sc.calculate(arr))); --> 디버깅용 꿀팁!!
+                //  System.out.println(sc.calculate(arr)); // double value
             }
+
+            // Spectral Centroid plotting
 
         }
 
