@@ -84,8 +84,21 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
+
         // [2단계] : FFT 결과 추출 (FFT)
         if (FirstOneInput != null){
+
+            // ZCR 추출을 위한 mini-phase
+            ArrayList<Float> ZCR_arr = new ArrayList<Float>(); // ZCR value는 나중에 plotting을 위해 여기다가 저장!!
+            for (double[] rawData: FirstOneInput){
+                // ZCR zcr = new ZCR();
+                float ZCRVal = ZCR.calculate(rawData);
+                ZCR_arr.add(ZCRVal);
+                Log.i("ZCRtest", Float.toString(ZCRVal));
+            }
+
+
             ArrayList<double[]> FFTValArray = new ArrayList<double[]>();
             int len = FirstOneInput.size();
             for (int i=0; i<len; i++){
