@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         // [0단계] : 각 PCM 파일별 경로 넘겨주기
         for (int i=0; i<8; i++){ // 일단 당장은 8개라 8 이라고 해놨음!! --> 추후 10개까지 채우면 그때 수정~
-            audioFiles[i] = (i+1)+".pcm"; // com\example\clapping_audio_feature_engineering\AudioFiles\1.pcm
+            audioFiles[i] = (i+1)+".pcm";
         } // audio file 배열에 file path 채워넣기
 
         fileName = audioFiles[0]; // 처음시작은 1.pcm을 디폴트로 해놓자!!
@@ -109,51 +109,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 fileName = audioFiles[2];
-                activateAll(fileName);
-            }
-        });
-
-        Button button4 = (Button) findViewById(R.id.button4) ;
-        button4.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fileName = audioFiles[3];
-                activateAll(fileName);
-            }
-        });
-
-        Button button5 = (Button) findViewById(R.id.button5) ;
-        button5.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fileName = audioFiles[4];
-                activateAll(fileName);
-            }
-        });
-
-        Button button6 = (Button) findViewById(R.id.button6) ;
-        button6.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fileName = audioFiles[5];
-                activateAll(fileName);
-            }
-        });
-
-        Button button7 = (Button) findViewById(R.id.button7) ;
-        button7.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fileName = audioFiles[6];
-                activateAll(fileName);
-            }
-        });
-
-        Button button8 = (Button) findViewById(R.id.button8) ;
-        button8.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fileName = audioFiles[7];
                 activateAll(fileName);
             }
         });
