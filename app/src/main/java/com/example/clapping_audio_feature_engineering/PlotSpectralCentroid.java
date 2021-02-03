@@ -14,7 +14,9 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static androidx.core.content.ContextCompat.createDeviceProtectedStorageContext;
 import static androidx.core.content.ContextCompat.getDrawable;
@@ -31,6 +33,10 @@ public class PlotSpectralCentroid {
             // entry_chart.add(new Entry(x값, y값));
             entry_chart.add(new Entry((float) (i*0.05), (float) (double) SCArray.get(i)));
         }
+
+        Log.i("test1", Arrays.toString(SCArray.toArray()));
+        Log.i("test", Arrays.toString(entry_chart.toArray()));
+
 
         LineDataSet set;
         set = new LineDataSet(entry_chart, null);
