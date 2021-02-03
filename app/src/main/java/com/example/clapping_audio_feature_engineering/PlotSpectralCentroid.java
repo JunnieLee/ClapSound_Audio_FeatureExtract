@@ -34,10 +34,6 @@ public class PlotSpectralCentroid {
             entry_chart.add(new Entry((float) (i*0.05), (float) (double) SCArray.get(i)));
         }
 
-        Log.i("test1", Arrays.toString(SCArray.toArray()));
-        Log.i("test", Arrays.toString(entry_chart.toArray()));
-
-
         LineDataSet set;
         set = new LineDataSet(entry_chart, null);
         dataSets.add(set); // add the data sets

@@ -104,6 +104,59 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button button3 = (Button) findViewById(R.id.button3) ;
+        button3.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fileName = audioFiles[2];
+                activateAll(fileName);
+            }
+        });
+
+        Button button4 = (Button) findViewById(R.id.button4) ;
+        button4.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fileName = audioFiles[3];
+                activateAll(fileName);
+            }
+        });
+
+        Button button5 = (Button) findViewById(R.id.button5) ;
+        button5.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fileName = audioFiles[4];
+                activateAll(fileName);
+            }
+        });
+
+        Button button6 = (Button) findViewById(R.id.button6) ;
+        button6.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fileName = audioFiles[5];
+                activateAll(fileName);
+            }
+        });
+
+        Button button7 = (Button) findViewById(R.id.button7) ;
+        button7.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fileName = audioFiles[6];
+                activateAll(fileName);
+            }
+        });
+
+        Button button8 = (Button) findViewById(R.id.button8) ;
+        button8.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fileName = audioFiles[7];
+                activateAll(fileName);
+            }
+        });
 
 
         } // end of OnCreate
@@ -125,8 +178,6 @@ public class MainActivity extends AppCompatActivity {
     private void CalculateFFTVal() {
         // [2단계] : FFT 결과 추출 (FFT)
         if (FirstOneInput != null) {
-
-            Log.i("????", Arrays.toString(FirstOneInput.toArray()));
 
             // ZCR 추출을 위한 mini-phase
             for (double[] rawData : FirstOneInput) {
@@ -165,9 +216,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        Log.i("Hellllloooo", Arrays.toString(FFTValArray.toArray()));
-
-
         // ** Spectral Centroid 계산
         for (double[]arr: FFTValArray){
             Double val = SpectralCentroid.calculate(arr);
@@ -175,10 +223,8 @@ public class MainActivity extends AppCompatActivity {
                 val = 0.0;
             }
             arr_of_SC.add(val);
-            Log.i("hello?", Double.toString(val));
             // Log.i("centroidtest", Double.toString(sc.calculate(arr))); --> 디버깅용 꿀팁!!
         }
-        Log.i("test3", Arrays.toString(arr_of_SC.toArray())); // empty
     }
 
     private void Plot(){
